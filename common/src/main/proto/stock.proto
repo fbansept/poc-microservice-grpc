@@ -1,0 +1,47 @@
+// Syntaxe proto3 — obligatoire
+syntax = "proto3";
+
+package stock;
+
+// Options Java de génération
+option java_package         = "com.example.grpc.stock";
+option java_multiple_files  = true;
+option java_outer_classname = "StockProto";
+
+// ─────────────────────────────────────────
+// Définition du service gRPC
+// ─────────────────────────────────────────
+service StockService {
+  // Vérifier le stock disponible pour un produit
+  rpc VerifierStock    (StockRequest)      returns (StockResponse);
+
+  // Décrémenter le stock lors d'une vente
+  rpc DecrementerStock (DecrementerRequest) returns (DecrementerResponse);
+}
+
+// ─────────────────────────────────────────
+// Messages de requête
+// ─────────────────────────────────────────
+message StockRequest {
+  string produit_id = 1;   // ⚠ numéros immuables en production
+}
+
+message DecrementerRequest {
+  string produit_id = 1;
+  int32  quantite   = 2;
+}
+
+// ─────────────────────────────────────────
+// Messages de réponse
+// ─────────────────────────────────────────
+message StockResponse {
+  string produit_id          = 1;
+  int32  quantite_disponible  = 2;
+  bool   disponible           = 3;
+}
+
+message DecrementerResponse {
+  bool   succes           = 1;
+  int32  quantite_restante = 2;
+  string message          = 3;
+}
