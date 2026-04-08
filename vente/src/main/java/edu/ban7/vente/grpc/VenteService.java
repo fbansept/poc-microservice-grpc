@@ -4,16 +4,16 @@ import com.example.grpc.stock.*;
 import edu.ban7.vente.exception.*;
 import edu.ban7.vente.model.VenteResultat;
 import io.grpc.StatusRuntimeException;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
 @Service
 public class VenteService {
 
-    private final StockServiceGrpc.StockServiceBlockingStub stockStub;
-
-    public VenteService(StockServiceGrpc.StockServiceBlockingStub stockStub) {
-        this.stockStub = stockStub;
-    }
+    // Injection du stub connecté au canal "stock-service"
+    // (config application.properties / application.yml)
+    @GrpcClient("stock-service")
+    private StockServiceGrpc.StockServiceBlockingStub stockStub;
 
     public VenteResultat effectuerVente(String produitId, int quantite) {
 
